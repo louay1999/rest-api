@@ -10,7 +10,7 @@ const User=require("./models/User")
 dbConection()
 app.use(express.json())
 
-
+//get all user
 app.get("/user",async(req,res)=>{
 try {
     const allUser=await User.find()
@@ -19,6 +19,7 @@ try {
     console.log(error.message)
 }
 })
+// add new user to db
 app.post("/user",async(req,res)=>{
   try {
     const userData=req.body
@@ -28,8 +29,28 @@ app.post("/user",async(req,res)=>{
     console.log(error.message)
   }
 })
+//update user by id
+app.put("/user/:id",async(req,res)=>{
+  const userId=req.params.id
+  try {
+   const resl= await User.findOneAndUpdate({_id:userId},{name:"ahmed",email:"llll@llll"},{new:true})
+   res.status(200).json({message:"user updated",data:resl})
+  } catch (error) {
+    res.status(400).send(error.message)
+    
+  }
+})
+//delete user by id 
+app.delete("/user/:id",async(req,res)=>{
+  const userId=req.params.id
+try {
+  const resl=await User.findByIdAndDelete(userId)
+  res.status(200).json({message:"user deleted"})
+} catch (error) {
+  res.status(400).send(error.message)
 
-
+}
+})
 
 
 
